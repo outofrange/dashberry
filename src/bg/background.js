@@ -24,46 +24,59 @@ function Revolution(config) {
     this.nextPage = 0;
     this.running = false;
 
+    var createBufferTabs = function () {
+        return chromep.tabs.create({
+            active: false
+        });
+    };
+
+    var preloadPages = function (tabs) {
+        that.tabs = tabs;
+        console.log('Preloading pages');
+
+        return Promise.all(_.map(that.tabs, function (tab) {
+            var page = that.config.pages[that.nextPage++ % that.config.pages.length];
+            console.log('Loading page: ' + page);
+
+            return chromep.tabs.update(tab.id, {
+                url: page,
+                active: false
+            });
+        }));
+    };
+
+    var showInitialTab = function () {
+        console.log('Showing initial tab');
+        return chromep.tabs.update(that.tabs[that.tab++].id, {
+            active: true
+        });
+    };
+
+    var startScrollingAndSetFirstSchedule = function (tab) {
+        chrome.tabs.sendMessage(tab.id, {selector: "#container-with-scroll", duration: that.config.displayMs});
+        console.log('Starting schedule');
+        window.setTimeout(showNext, that.config.displayMs);
+    };
+
     this.start = function () {
         that.running = true;
 
-        // init Buffer
         console.log('Creating ' + that.config.tabBuffer + ' buffer tabs');
-        Promise.all(_.times(that.config.tabBuffer, function () {
-            return chromep.tabs.create({
-                active: false
-            });
-        })).then(function (tabs) {
-            that.tabs = tabs;
-            console.log('Preloading pages');
-
-            return Promise.all(_.map(that.tabs, function (tab) {
-                var page = that.config.pages[that.nextPage++ % that.config.pages.length];
-                console.log('Loading page: ' + page);
-
-                return chromep.tabs.update(tab.id, {
-                    url: page,
-                    active: false
-                });
-            }));
-        }).then(function () {
-            console.log('Showing initial tab');
-            return chromep.tabs.update(that.tabs[that.tab++].id, {
-                active: true
-            });
-        }).then(function (tab) {
-            chrome.tabs.sendMessage(tab.id, {selector: "#container-with-scroll", duration: that.config.displayMs});
-            console.log('Starting schedule');
-            window.setTimeout(that.showNext, that.config.displayMs);
-        });
+        Promise
+            .all(_.times(that.config.tabBuffer, createBufferTabs))
+            .then(preloadPages)
+            .then(showInitialTab)
+            .then(startScrollingAndSetFirstSchedule);
     };
 
     this.stop = function () {
         that.running = false;
-        chrome.tabs.remove(_.map(that.tabs, function (tab) { return tab.id }));
+        chrome.tabs.remove(_.map(that.tabs, function (tab) {
+            return tab.id
+        }));
     };
 
-    this.showNext = function () {
+    var showNext = function () {
         if (that.running) {
             console.log('Scheduled call of showNext');
 
@@ -74,7 +87,10 @@ function Revolution(config) {
                 active: true
             }).then(function () {
                 // start scrolling
-                chrome.tabs.sendMessage(tabToShow.id, {selector: "#container-with-scroll", duration: that.config.displayMs});
+                chrome.tabs.sendMessage(tabToShow.id, {
+                    selector: "#container-with-scroll",
+                    duration: that.config.displayMs
+                });
 
                 var bufferTabIndex = (that.tab++ - 1) % that.tabs.length;
                 var bufferTab = that.tabs[bufferTabIndex];
@@ -87,7 +103,7 @@ function Revolution(config) {
                 })
             }).then(function (tab) {
                 console.log('Scheduling next tab in ' + that.config.displayMs + 'ms');
-                window.setTimeout(that.showNext, that.config.displayMs);
+                window.setTimeout(showNext, that.config.displayMs);
             });
         } else {
             console.log('showNext called but not running');
@@ -99,6 +115,7 @@ function Revolution(config) {
 var r;
 r = new Revolution(config);
 r.start();
+
 function start() {
     r = new Revolution(config);
     r.start();
