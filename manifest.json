@@ -15,11 +15,15 @@
   },
   "browser_action": {
     "default_icon": "icons/icon19.png",
-    "default_title": "Dashberry",
-    "default_popup": "/popup/popup.html"
+    "default_title": "Dashberry"
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "chrome_style": true
   },
   "permissions": [
-    "tabs"
+    "tabs",
+    "contextMenus"
   ],
   "content_scripts": [
   {

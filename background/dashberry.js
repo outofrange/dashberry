@@ -113,16 +113,33 @@ function Revolution(config) {
 
 
 var r;
-r = new Revolution(config);
-r.start();
 
 function start() {
-    r = new Revolution(config);
-    r.start();
+    if (!r || !r.running) {
+        r = new Revolution(config);
+        r.start();
+
+        chrome.browserAction.setTitle({title: 'Dashberry - Running'});
+        chrome.browserAction.setBadgeText({text: 'RUN'});
+    }
 }
 
 function stop() {
     if (r) {
         r.stop();
+        r = null;
+
+        chrome.browserAction.setTitle({title: 'Dashberry - Stopped'});
+        chrome.browserAction.setBadgeText({text: ''});
     }
 }
+
+function toggleMode() {
+    if (r) {
+        stop();
+    } else {
+        start();
+    }
+}
+
+chrome.browserAction.onClicked.addListener(toggleMode);
