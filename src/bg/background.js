@@ -5,7 +5,13 @@ var config = {
     tabBuffer: 3,
 
     pages: [
-
+        "https://postat.visualstudio.com/KIT/_home?activeDashboardId=a7a96df4-08df-45ad-97cf-321048f88980",
+        "https://postat.visualstudio.com/KIT/_home?activeDashboardId=00d6d743-6661-4b37-9ae6-b29b41280519",
+        "https://postat.visualstudio.com/KIT/_home?activeDashboardId=26835044-9b38-4b6e-a8bd-0afe67f8d07a",
+        "https://postat.visualstudio.com/KIT/_home?activeDashboardId=e2bfc349-9d11-4003-a51d-a7bfa944385c",
+        "https://postat.visualstudio.com/KIT/_home?activeDashboardId=422d084c-d912-457b-a1f3-f762f602328c",
+        "https://postat.visualstudio.com/KIT/_home?activeDashboardId=70d974ac-4528-4925-a8d7-fe7f5e161ef1",
+        "https://postat.visualstudio.com/KIT/_home?activeDashboardId=5711465a-71eb-42a8-aa46-7631aecff330"
     ]
 };
 
