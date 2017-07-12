@@ -5,7 +5,7 @@ var config = {
     tabBuffer: 3,
 
     pages: [
-        // urls
+
     ]
 };
 
@@ -45,7 +45,8 @@ function Revolution(config) {
             return chromep.tabs.update(that.tabs[that.tab++].id, {
                 active: true
             });
-        }).then(function () {
+        }).then(function (tab) {
+            chrome.tabs.sendMessage(tab.id, {selector: "#container-with-scroll", duration: that.config.displayMs});
             console.log('Starting schedule');
             window.setTimeout(that.showNext, that.config.displayMs);
         });
@@ -67,7 +68,7 @@ function Revolution(config) {
                 active: true
             }).then(function () {
                 // start scrolling
-                chrome.tabs.sendMessage(tabToShow.id, {});
+                chrome.tabs.sendMessage(tabToShow.id, {selector: "#container-with-scroll", duration: that.config.displayMs});
 
                 var bufferTabIndex = (that.tab++ - 1) % that.tabs.length;
                 var bufferTab = that.tabs[bufferTabIndex];

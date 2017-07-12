@@ -1,22 +1,15 @@
-var selector = "#container-with-scroll";
-var duration = 45 * 1000; // seconds
-
-function scrollToBottom(element, duration) {
-    var scrollHeight = element[0].scrollHeight - element.height();
-    element.css({
-        scrollTop: 0
-    })
-        .animate({
-                scrollTop: scrollHeight
-            },
-            duration);
-}
-
-function startScrolling() {
+function scrollFromTopToBottom(selector, duration) {
     var c = $(selector);
 
     if (!document.hidden) {
-        scrollToBottom(c, duration);
+        var scrollHeight = c[0].scrollHeight - c.height();
+        c.css({
+            scrollTop: 0
+        })
+            .animate({
+                    scrollTop: scrollHeight
+                },
+                duration);
     } else {
         c.finish();
         c.css({
@@ -25,6 +18,6 @@ function startScrolling() {
     }
 }
 
-chrome.runtime.onMessage.addListener(function() {
-	startScrolling();
+chrome.runtime.onMessage.addListener(function (args) {
+    scrollFromTopToBottom(args.selector, args.duration);
 });
