@@ -10,13 +10,13 @@
     "128": "icons/icon128.png"
   },
   "background": {
-    "page": "src/bg/background.html",
+    "page": "/background/dashberry.html",
     "persistent": true
   },
   "browser_action": {
     "default_icon": "icons/icon19.png",
-    "default_title": "browser action demo",
-    "default_popup": "src/popup/popup.html"
+    "default_title": "Dashberry",
+    "default_popup": "/popup/popup.html"
   },
   "permissions": [
     "tabs"
@@ -24,7 +24,7 @@
   "content_scripts": [
   {
     "matches": ["https://*.visualstudio.com/*"],
-    "js": ["js/jquery.js", "src/inject/inject.js"]
+    "js": ["/thirdparty/jquery.js", "/content/scroll.js"]
   }
 ]
 }
