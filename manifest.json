@@ -9,7 +9,6 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "default_locale": "en",
   "background": {
     "page": "src/bg/background.html",
     "persistent": true
@@ -20,13 +19,12 @@
     "default_popup": "src/popup/popup.html"
   },
   "permissions": [
-    "contentSettings",
     "tabs"
   ],
   "content_scripts": [
   {
     "matches": ["https://*.visualstudio.com/*"],
-    "js": ["src/inject/inject.js"]
+    "js": ["js/jquery.js", "src/inject/inject.js"]
   }
 ]
 }
