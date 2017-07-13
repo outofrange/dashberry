@@ -7,6 +7,15 @@
         autoStart: false,
         pages: []
     };
+    var Page = function (url) {
+        this.url = url;
+        this.displayMs = $scope.config.displayMs;
+        this.scroll = {
+            enabled: false,
+            selector: null,
+            duration: $scope.config.displayMs
+        };
+    };
 
     angular.module('dashberry', ['ngMaterial'])
         .controller('OptionsController', function ($scope) {
@@ -24,16 +33,6 @@
                         $scope.config = c;
                     });
             })();
-
-            var Page = function (url) {
-                this.url = url;
-                this.displayMs = $scope.config.displayMs;
-                this.scroll = {
-                    enabled: false,
-                    selector: null,
-                    duration: $scope.config.displayMs
-                };
-            };
 
             $scope.save = function () {
                 chrome.storage.sync.set({config: $scope.config});
