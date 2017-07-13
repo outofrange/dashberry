@@ -1,5 +1,52 @@
+(function () {
+    const chromep = new ChromePromise();
+
+    var defaultConfig = {
+        displayMs: 3000,
+        tabBuffer: 3,
+        autoStart: false,
+        pages: []
+    };
+
+    angular.module('dashberry', ['ngMaterial'])
+        .controller('OptionsController', function ($scope) {
+            $scope.config = null;
+            (function () {
+                return chromep.storage.sync.get('config')
+                    .then(function (c) {
+                        console.log('Loaded config from storage');
+                        return c.config;
+                    }).catch(function () {
+                        console.log('Loading default config, nothing found in storage');
+                        return defaultConfig;
+                    }).then(function (c) {
+                        console.log(c);
+                        $scope.config = c;
+                    });
+            })();
+
+            var Page = function (url) {
+                this.url = url;
+                this.displayMs = $scope.config.displayMs;
+                this.scroll = {
+                    enabled: false,
+                    selector: null,
+                    duration: $scope.config.displayMs
+                };
+            };
+
+            $scope.save = function () {
+                chrome.storage.sync.set({config: $scope.config});
+            };
+
+            $scope.clear = function () {
+                $scope.config = defaultConfig;
+            };
+        });
+})();
+/*
 document.addEventListener('DOMContentLoaded', function () {
-    var bg = chrome.extension.getBackgroundPage();
+    //var bg = chrome.extension.getBackgroundPage();
     var autostart = $('#autostart');
     var config = $('#config');
 
@@ -21,3 +68,4 @@ document.addEventListener('DOMContentLoaded', function () {
         bg.console.log(val);
     });
 });
+*/

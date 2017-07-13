@@ -1,24 +1,51 @@
 <!doctype html>
-<style type="text/css">
-    #mainPopup {
-        padding: 10px;
-        height: 200px;
-        width: 400px;
-        font-family: Helvetica, Ubuntu, Arial, sans-serif;
-    }
+<html ng-app="dashberry">
+<head>
+    <link rel="stylesheet" href="../thirdparty/angular-material.min.css">
+    <link href="../thirdparty/icon.css" rel="stylesheet">
+    <script src="../thirdparty/angular.min.js"></script>
+</head>
+<body ng-cloak ng-controller="OptionsController" ng-show="config">
+<div layout layout-align="center center">
+    <md-input-container>
+        <md-checkbox ng-model="config.autoStart">Autostart</md-checkbox>
+    </md-input-container>
+</div>
+<div layout layout-align="center center">
 
-    h1 {
-        font-size: 2em;
-    }
-</style>
+    <md-input-container>
+        <label>Display time (ms)</label>
+        <input type="number" min="0" ng-model="config.displayMs">
+    </md-input-container>
+</div>
+<div layout layout-align="center center">
 
-<div id="mainPopup">
-    <label for="autostart">Autostart</label>
-    <input type="checkbox" id="autostart">
-
-    <label for="config">Config</label>
-    <textarea id="config"></textarea>
+    <md-input-container>
+        <label>Tab Buffer</label>
+        <input type="number" min="0" ng-model="config.tabBuffer">
+    </md-input-container>
 </div>
 
-<script src="/thirdparty/jquery.js"></script>
+<div layout layout-align="center center">
+    <md-input-container>
+        <label>JSON</label>
+        <textarea readonly>{{config | json}}</textarea>
+    </md-input-container>
+</div>
+
+<div layout layout-align="center center">
+    <md-button ng-click="save()">Save</md-button>
+    <md-button ng-click="clear()">Reset</md-button>
+</div>
+
+<script src="../thirdparty/jquery.js"></script>
+<script src="../thirdparty/angular-animate.min.js"></script>
+<script src="../thirdparty/angular-aria.min.js"></script>
+<script src="../thirdparty/angular-messages.min.js"></script>
+<script src="../thirdparty/angular-material.min.js"></script>
+<script src="../thirdparty/lodash.js"></script>
+<script src="../thirdparty/chrome-promise.js"></script>
+
 <script type="text/javascript" src="options.js"></script>
+</body>
+</html>
